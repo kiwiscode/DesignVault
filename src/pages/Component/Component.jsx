@@ -1,4 +1,4 @@
-import BottomNavigationBar from "../../component/BottomNavigationBar.jsx/BottomNavigationBar";
+import BottomNavigationBar from "../../component/BottomNavigationBar/BottomNavigationBar";
 import MacBookFolder from "../../component/MacBookFolder/MacBookFolder";
 
 export default function Component() {

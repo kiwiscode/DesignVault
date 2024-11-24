@@ -1,10 +1,14 @@
 import "./BottomNavigationBar.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../context/ThemeContext";
 export default function BottomNavigationBar() {
   const [isExiting, setIsExiting] = useState(false);
   const navigate = useNavigate();
+  const path = useLocation().pathname;
+  const [hoveredRoute, setHoveredRoute] = useState(path);
+  const { themeName } = useContext(ThemeContext);
 
   const handleNavClick = (route) => {
     setIsExiting(true);
@@ -12,6 +16,14 @@ export default function BottomNavigationBar() {
       navigate(route);
     }, 500);
   };
+
+  useEffect(() => {
+    if (!isExiting) {
+      document.documentElement.style.setProperty("overflow", "hidden");
+    } else {
+      document.documentElement.style.setProperty("overflow", "auto");
+    }
+  }, [isExiting]);
 
   const navItems = [
     {
@@ -24,7 +36,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -44,7 +56,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -64,7 +76,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -84,7 +96,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -104,7 +116,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -124,7 +136,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -144,7 +156,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -164,7 +176,7 @@ export default function BottomNavigationBar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="size-8"
+          className="size-6"
         >
           <path
             strokeLinecap="round"
@@ -178,31 +190,43 @@ export default function BottomNavigationBar() {
 
   return (
     <AnimatePresence>
-      {!isExiting && ( // Sadece kaybolma durumunda gösterme
+      {!isExiting && (
         <motion.nav
           className="bottom-nav-wrapper-- "
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, y: -50 }}
-          transition={{ duration: 0.5 }} // Animasyon süresi
+          transition={{ duration: 0.5 }}
         >
-          <motion.ul
-            className="bottom-nav-- list-none"
+          <motion.div
+            className={`bottom-nav-- ${themeName} flex justify-between w-full`}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {navItems.map((item, index) => (
-              <motion.li
-                data-name={item.name}
-                onClick={() => handleNavClick(item.route)}
-                key={index}
-                className="cursor-pointer"
-              >
-                {item.iconCode}
-              </motion.li>
-            ))}
-          </motion.ul>
+            <motion.div className="place-holder-- w-full max-md:hidden"></motion.div>
+            <motion.ul className="list-none flex justify-center items-center w-full">
+              {navItems.map((item, index) => (
+                <motion.li
+                  onMouseEnter={() => {
+                    setHoveredRoute(`/${item.name.toLowerCase()}`);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredRoute(path);
+                  }}
+                  data-name={item.name}
+                  onClick={() => handleNavClick(item.route)}
+                  key={index}
+                  className="cursor-pointer"
+                >
+                  {item.iconCode}
+                </motion.li>
+              ))}
+            </motion.ul>
+            <motion.div className="w-full text-right pr-[32px] font-semibold text-[12px]">
+              {hoveredRoute}
+            </motion.div>
+          </motion.div>
         </motion.nav>
       )}
     </AnimatePresence>

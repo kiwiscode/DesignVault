@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 // components
 import InitialNavigation from "./component/InitialNavigation/InitialNavigation";
 import PageLoadingTransition from "./component/PageLoadingTransition/PageLoadingTransition";
+import OnOffSwitchButton from "./component/OnOffSwitchButton/OnOffSwitchButton";
 
 // Lazy load the pages
 const Component = lazy(() => import("./pages/Component/Component"));
@@ -12,6 +13,7 @@ function App() {
   const path = useLocation().pathname;
   return (
     <div className="App">
+      <OnOffSwitchButton />
       {path !== "/components" && <InitialNavigation />}
       {/* Wrap routes with Suspense and provide a fallback */}
       <Suspense fallback={<PageLoadingTransition />}>
