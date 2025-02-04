@@ -1,10 +1,11 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 
 // components
-import InitialNavigation from "./component/InitialNavigation/InitialNavigation";
 import PageLoadingTransition from "./component/PageLoadingTransition/PageLoadingTransition";
 import OnOffSwitchButton from "./component/OnOffSwitchButton/OnOffSwitchButton";
+import BottomNavigationBar from "./component/BottomNavigationBar/BottomNavigationBar";
+import Home from "./pages/Home/Home";
 
 // Lazy load the pages
 const Component = lazy(() => import("./pages/Component/Component"));
@@ -14,11 +15,11 @@ function App() {
   return (
     <div className="App">
       <OnOffSwitchButton />
-      {path !== "/components" && <InitialNavigation />}
-      {/* Wrap routes with Suspense and provide a fallback */}
+      <BottomNavigationBar />
       <Suspense fallback={<PageLoadingTransition />}>
         <Routes>
           <Route path="/components" element={<Component />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </Suspense>
     </div>

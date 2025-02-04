@@ -33,23 +33,71 @@
 .bottom-nav-- li {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   transition: all 0.3s ease-in-out;
+}
+.bottom-nav-- li div {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
-.bottom-nav--.dark-theme li:hover {
+/* .bottom-nav--.dark-theme li:hover div {
+  transition: all 0.3s ease-in-out;
   transform: translateY(-20px) scale(1.2);
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.bottom-nav-- li:hover {
+.bottom-nav-- li:hover div {
+  transition: all 0.3s ease-in-out;
   transform: translateY(-20px) scale(1.2);
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+} */
+
+.active_hover.dark-theme li:hover div {
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-20px) scale(1.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.active_hover li:hover div {
+  transition: all 0.3s ease-in-out;
+  transform: translateY(-20px) scale(1.2);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.active_route {
+  position: relative;
+}
+
+.active_route::before {
+  position: absolute;
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: green;
+  border-radius: 50%;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: -8px;
+  background: linear-gradient(
+    45deg,
+    rgb(255, 0, 0),
+    rgb(255, 165, 0),
+    rgb(255, 255, 0),
+    rgb(0, 255, 0),
+    rgb(0, 0, 255),
+    rgb(75, 0, 130),
+    rgb(238, 130, 238)
+  );
 }

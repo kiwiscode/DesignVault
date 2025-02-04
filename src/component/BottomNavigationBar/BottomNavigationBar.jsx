@@ -5,13 +5,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 export default function BottomNavigationBar() {
   const [isExiting, setIsExiting] = useState(false);
+  const [isRocketNavLoading, setRocketNavLoad] = useState(false);
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const [hoveredRoute, setHoveredRoute] = useState(path);
   const { themeName } = useContext(ThemeContext);
 
   const handleNavClick = (route) => {
-    setIsExiting(true);
+    if (path !== route) {
+      setRocketNavLoad(true);
+      setTimeout(() => {
+        setRocketNavLoad(false);
+      }, 500);
+    }
     setTimeout(() => {
       navigate(route);
     }, 500);
@@ -28,7 +34,7 @@ export default function BottomNavigationBar() {
   const navItems = [
     {
       name: "Home",
-      route: "/",
+      route: "/home",
       iconCode: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -190,45 +196,55 @@ export default function BottomNavigationBar() {
 
   return (
     <AnimatePresence>
-      {!isExiting && (
-        <motion.nav
-          className="bottom-nav-wrapper-- "
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -50 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.div
-            className={`bottom-nav-- ${themeName} flex justify-between w-full`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.div className="place-holder-- w-full max-md:hidden"></motion.div>
-            <motion.ul className="list-none flex justify-center items-center w-full">
-              {navItems.map((item, index) => (
-                <motion.li
-                  onMouseEnter={() => {
-                    setHoveredRoute(`/${item.name.toLowerCase()}`);
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredRoute(path);
-                  }}
-                  data-name={item.name}
-                  onClick={() => handleNavClick(item.route)}
-                  key={index}
-                  className="cursor-pointer"
-                >
-                  {item.iconCode}
-                </motion.li>
-              ))}
-            </motion.ul>
-            <motion.div className="w-full text-right pr-[32px] font-semibold text-[12px]">
-              {hoveredRoute}
-            </motion.div>
-          </motion.div>
-        </motion.nav>
+      {isRocketNavLoading && (
+        <motion.div
+          className="absolute top-0 left-0 h-1 bg-blue-500"
+          initial={{ width: 0 }}
+          animate={{ width: "100%" }}
+          exit={{ width: 0 }}
+        />
       )}
+      <motion.nav
+        className="bottom-nav-wrapper-- "
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0, y: -50 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div
+          className={`bottom-nav-- ${
+            !isRocketNavLoading && hoveredRoute !== path && "active_hover"
+          } ${themeName}  flex justify-between w-full`}
+          // initial={{ opacity: 0, y: 50 }}
+          // animate={{ opacity: 1, y: 0 }}
+          // transition={{ duration: 0.5 }}
+        >
+          <motion.div className="w-full max-md:hidden"></motion.div>
+          <motion.ul className="list-none flex justify-center items-center w-full gap-[8px]">
+            {navItems.map((item, index) => (
+              <motion.li
+                onMouseEnter={() => {
+                  setHoveredRoute(`/${item.name.toLowerCase()}`);
+                }}
+                onMouseLeave={() => {
+                  setHoveredRoute(path);
+                }}
+                data-name={item.name}
+                onClick={() => handleNavClick(item.route)}
+                className={`cursor-pointer ${
+                  path === item.route && "active_route"
+                }`}
+                key={index}
+              >
+                <motion.div>{item.iconCode}</motion.div>
+              </motion.li>
+            ))}
+          </motion.ul>
+          <motion.div className="w-full text-right pr-[32px] font-semibold text-[12px]">
+            {hoveredRoute}
+          </motion.div>
+        </motion.div>
+      </motion.nav>
     </AnimatePresence>
   );
 }

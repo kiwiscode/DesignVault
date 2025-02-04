@@ -1,0 +1,54 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
+
+export default function Home() {
+  const { themeName } = useContext(ThemeContext);
+  return (
+    <main
+      className={`text-[${
+        themeName === "dark-theme" && "#ffffff"
+      }] px-[36px] mt-[60px]`}
+    >
+      <div
+        style={{
+          //   fontFamily: '"Shadows Into Light", cursive',
+          fontSize: "2rem",
+        }}
+      >
+        <p>
+          Hi 👋🏻 I'm Aykut. I’m passionate about both frontend and backend
+          development.
+          <br />
+          On this platform, I share the projects I've worked on and the tools
+          I've used.
+        </p>
+        <p>
+          This site is a place to learn, explore, and get inspired. Here’s what
+          you’ll find:
+        </p>
+        <ul style={{ fontSize: "1.5rem" }} className="list-none">
+          <li>
+            <strong>Inspiration:</strong> Websites and resources that inspired
+            me.
+          </li>
+          <li>
+            <strong>Components:</strong> Reusable components from my projects.
+          </li>
+          <li>
+            <strong>Assets:</strong> Icons and assets I frequently use.
+          </li>
+          <li>
+            <strong>Practice:</strong> Techniques and coding challenges I enjoy.
+          </li>
+          <li>
+            <strong>Projects:</strong> Links to my work and projects.
+          </li>
+          <li>
+            <strong>Blog:</strong> Articles on frontend, backend, and tech
+            tools.
+          </li>
+        </ul>
+      </div>
+    </main>
+  );
+}
