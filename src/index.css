@@ -7,7 +7,6 @@
   --light-theme-border: 2px solid #777777;
   --light-theme-text-color: #000000;
   --light-theme-bg: #f4f4f4;
-
   /* dark theme */
   --dark-theme-border: 2px solid #777777;
   --dark-theme-text-color: #777777;
@@ -27,8 +26,6 @@ body {
   color: #333;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue",
-    Helvetica, Arial, sans-serif, system-ui;
 }
 
 body::before {
@@ -51,4 +48,41 @@ body::before {
   transform-style: flat;
   pointer-events: none;
   z-index: -1;
+}
+
+@font-face {
+  font-family: "chirp-regular";
+  src: url("./assets/fonts/Chirp-Regular.80fda27a.woff2") format("woff2");
+}
+@font-face {
+  font-family: "chirp-medium";
+  src: url("./assets/fonts/Chirp-Medium.f8e2739a.woff2") format("woff2");
+}
+@font-face {
+  font-family: "chirp-heavy";
+  src: url("./assets/fonts/Chirp-Heavy.f44ae4ea.woff2") format("woff2");
+}
+@font-face {
+  font-family: "chirp-bold";
+  src: url("./assets/fonts/Chirp-Bold.ebb56aba.woff2") format("woff2");
+}
+@font-face {
+  font-family: "chirp-extended-heavy";
+  src: url("./assets/fonts/chirp-extended-heavy-web.woff2") format("woff2");
+}
+
+.chirp-regular-font {
+  font-family: "chirp-regular" !important;
+}
+.chirp-medium-font {
+  font-family: "chirp-medium" !important;
+}
+.chirp-heavy-font {
+  font-family: "chirp-heavy" !important;
+}
+.chirp-bold-font {
+  font-family: "chirp-bold" !important;
+}
+.chirp-extended-heavy {
+  font-family: "chirp-extended-heavy" !important;
 }

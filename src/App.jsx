@@ -19,7 +19,7 @@ function App() {
       <Suspense fallback={<PageLoadingTransition />}>
         <Routes>
           <Route path="/components" element={<Component />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </Suspense>
     </div>
