@@ -34,7 +34,7 @@ export default function BottomNavigationBar() {
   const navItems = [
     {
       name: "Home",
-      route: "/home",
+      route: "/",
       iconCode: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -205,7 +205,7 @@ export default function BottomNavigationBar() {
         />
       )}
       <motion.nav
-        className="bottom-nav-wrapper-- "
+        className="bottom-nav-wrapper-- chirp-regular-font"
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, y: -50 }}
@@ -213,7 +213,9 @@ export default function BottomNavigationBar() {
       >
         <motion.div
           className={`bottom-nav-- ${
-            !isRocketNavLoading && hoveredRoute !== path && "active_hover"
+            hoveredRoute === "/home" && path === "/"
+              ? null
+              : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
           } ${themeName}  flex justify-between w-full`}
           // initial={{ opacity: 0, y: 50 }}
           // animate={{ opacity: 1, y: 0 }}
@@ -224,10 +226,10 @@ export default function BottomNavigationBar() {
             {navItems.map((item, index) => (
               <motion.li
                 onMouseEnter={() => {
-                  setHoveredRoute(`/${item.name.toLowerCase()}`);
+                  setHoveredRoute(`/${item.name?.toLowerCase()}`);
                 }}
                 onMouseLeave={() => {
-                  setHoveredRoute(path);
+                  setHoveredRoute(null);
                 }}
                 data-name={item.name}
                 onClick={() => handleNavClick(item.route)}
@@ -241,7 +243,7 @@ export default function BottomNavigationBar() {
             ))}
           </motion.ul>
           <motion.div className="w-full text-right pr-[32px] font-semibold text-[12px]">
-            {hoveredRoute}
+            {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
           </motion.div>
         </motion.div>
       </motion.nav>
