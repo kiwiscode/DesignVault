@@ -1,5 +1,5 @@
 import "./BottomNavigationBar.css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -10,6 +10,11 @@ export default function BottomNavigationBar() {
   const path = useLocation().pathname;
   const [hoveredRoute, setHoveredRoute] = useState(path);
   const { themeName } = useContext(ThemeContext);
+  const [barPosition, setBarPosition] = useState("default_pos");
+  const navControls = useAnimation();
+  const divControls = useAnimation();
+  const navBoxInsideControls = useAnimation();
+  const navBoxInsideUlItemControls = useAnimation();
 
   const handleNavClick = (route) => {
     if (path !== route) {
@@ -206,23 +211,27 @@ export default function BottomNavigationBar() {
       )}
       <motion.nav
         className="bottom-nav-wrapper-- chirp-regular-font"
-        initial={{ bottom: 20, opacity: 1 }}
-        animate={{ bottom: 20, opacity: 1 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.1 }}
+        initial={{ bottom: 20 }}
+        animate={navControls}
       >
-        <motion.div className="relative max-w-[90%] mx-auto">
+        <motion.div
+          className="relative"
+          initial={{ maxWidth: "96%", margin: "0 2% 0 2%" }}
+          animate={divControls}
+        >
           <motion.div
             className={`bottom-nav-- ${
               hoveredRoute === "/home" && path === "/"
                 ? null
                 : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
-            } ${themeName}  flex justify-between w-full`}
-            // initial={{ opacity: 0, y: 50 }}
-            // animate={{ opacity: 1, y: 0 }}
-            // transition={{ duration: 0.5 }}
+            } ${themeName} flex justify-between w-full`}
+            animate={navBoxInsideControls}
           >
-            <motion.ul className="list-none flex justify-center items-center w-full gap-[8px]">
+            <motion.ul
+              className="list-none flex justify-center items-center w-full gap-[8px]"
+              initial={{ flexWrap: "wrap" }}
+              animate={navBoxInsideUlItemControls}
+            >
               {navItems.map((item, index) => (
                 <motion.li
                   onMouseEnter={() => {
@@ -243,10 +252,64 @@ export default function BottomNavigationBar() {
               ))}
             </motion.ul>
           </motion.div>
+
           <motion.div
-            className={`absolute font-semibold text-[12px] right-0 route ${themeName}`}
+            className={`absolute font-semibold text-[12px] right-0 -top-[22px] route ${themeName}`}
           >
             {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
+          </motion.div>
+
+          <motion.div
+            className={`absolute font-semibold text-[12px] left-0 -top-[22px] navbar-settings ${themeName}`}
+          >
+            <span
+              onClick={async () => {
+                await navControls.start({
+                  bottom: "auto",
+                  top: 40,
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                await divControls.start({
+                  maxWidth: "5%",
+                  margin: "0 0 0 2%",
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                await navBoxInsideControls.start({
+                  height: "90vh",
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                setBarPosition("align_left");
+              }}
+            >
+              |
+            </span>
+
+            <span
+              onClick={async () => {
+                await navBoxInsideControls.start({
+                  height: "initial",
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                await divControls.start({
+                  maxWidth: "96%",
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                await navControls.start({
+                  bottom: 20,
+                  top: "auto",
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                });
+
+                setBarPosition("default_pos");
+              }}
+            >
+              -
+            </span>
           </motion.div>
         </motion.div>
       </motion.nav>

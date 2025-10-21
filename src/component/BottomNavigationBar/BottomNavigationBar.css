@@ -1,6 +1,5 @@
 .bottom-nav-wrapper-- {
   position: absolute;
-  bottom: 20px;
   width: 100%;
 }
 
@@ -10,7 +9,6 @@
     rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
-
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-radius: 20px;
@@ -21,37 +19,46 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .bottom-nav--.dark-theme,
-.route.dark-theme {
+.route.dark-theme,
+.navbar-settings.dark-theme {
   box-shadow: none;
   background: rgba(0, 0, 0, 0.1);
   color: #ffffff;
   border: 1px solid #777777;
 }
 
-.route.dark-theme {
+.route.dark-theme,
+.navbar-settings.dark-theme {
   border-bottom: 0;
 }
 
-.route {
+.route,
+.navbar-settings {
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
   padding: 4px 16px;
-  top: -22px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-top-right-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 0;
+}
+
+.route {
+  border-top-right-radius: 20px;
+}
+.navbar-settings {
+  border-top-left-radius: 20px;
 }
 
 .bottom-nav-- ul {
