@@ -2,8 +2,6 @@
   position: absolute;
   bottom: 20px;
   width: 100%;
-  padding-left: 32px;
-  padding-right: 32px;
 }
 
 .bottom-nav-- {
@@ -12,6 +10,7 @@
     rgba(255, 255, 255, 0.2) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
+
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-radius: 20px;
@@ -21,13 +20,42 @@
   gap: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-right-radius: 0;
 }
 
-.bottom-nav--.dark-theme {
+.bottom-nav--.dark-theme,
+.route.dark-theme {
   box-shadow: none;
   background: rgba(0, 0, 0, 0.1);
   color: #ffffff;
   border: 1px solid #777777;
+}
+
+.route.dark-theme {
+  border-bottom: 0;
+}
+
+.route {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  padding: 4px 16px;
+  top: -22px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-top-right-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 0;
+}
+
+.bottom-nav-- ul {
+  padding: 0;
 }
 
 .bottom-nav-- li {
@@ -78,6 +106,7 @@
 
 .active_route {
   position: relative;
+  cursor: default !important;
 }
 
 .active_route::before {

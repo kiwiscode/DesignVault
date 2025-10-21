@@ -206,43 +206,46 @@ export default function BottomNavigationBar() {
       )}
       <motion.nav
         className="bottom-nav-wrapper-- chirp-regular-font"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
+        initial={{ bottom: 20, opacity: 1 }}
+        animate={{ bottom: 20, opacity: 1 }}
         exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.1 }}
       >
-        <motion.div
-          className={`bottom-nav-- ${
-            hoveredRoute === "/home" && path === "/"
-              ? null
-              : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
-          } ${themeName}  flex justify-between w-full`}
-          // initial={{ opacity: 0, y: 50 }}
-          // animate={{ opacity: 1, y: 0 }}
-          // transition={{ duration: 0.5 }}
-        >
-          <motion.div className="w-full max-md:hidden"></motion.div>
-          <motion.ul className="list-none flex justify-center items-center w-full gap-[8px]">
-            {navItems.map((item, index) => (
-              <motion.li
-                onMouseEnter={() => {
-                  setHoveredRoute(`/${item.name?.toLowerCase()}`);
-                }}
-                onMouseLeave={() => {
-                  setHoveredRoute(null);
-                }}
-                data-name={item.name}
-                onClick={() => handleNavClick(item.route)}
-                className={`cursor-pointer ${
-                  path === item.route && "active_route"
-                }`}
-                key={index}
-              >
-                <motion.div>{item.iconCode}</motion.div>
-              </motion.li>
-            ))}
-          </motion.ul>
-          <motion.div className="w-full text-right pr-[32px] font-semibold text-[12px]">
+        <motion.div className="relative max-w-[90%] mx-auto">
+          <motion.div
+            className={`bottom-nav-- ${
+              hoveredRoute === "/home" && path === "/"
+                ? null
+                : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
+            } ${themeName}  flex justify-between w-full`}
+            // initial={{ opacity: 0, y: 50 }}
+            // animate={{ opacity: 1, y: 0 }}
+            // transition={{ duration: 0.5 }}
+          >
+            <motion.ul className="list-none flex justify-center items-center w-full gap-[8px]">
+              {navItems.map((item, index) => (
+                <motion.li
+                  onMouseEnter={() => {
+                    setHoveredRoute(`/${item.name?.toLowerCase()}`);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredRoute(null);
+                  }}
+                  data-name={item.name}
+                  onClick={() => handleNavClick(item.route)}
+                  className={`cursor-pointer ${
+                    path === item.route && "active_route"
+                  }`}
+                  key={index}
+                >
+                  <motion.div>{item.iconCode}</motion.div>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
+          <motion.div
+            className={`absolute font-semibold text-[12px] right-0 route ${themeName}`}
+          >
             {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
           </motion.div>
         </motion.div>
