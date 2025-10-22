@@ -15,6 +15,7 @@ export default function BottomNavigationBar() {
   const divControls = useAnimation();
   const navBoxInsideControls = useAnimation();
   const navBoxInsideUlItemControls = useAnimation();
+  const [hideFlags, setHideFlags] = useState(false);
 
   const handleNavClick = (route) => {
     if (path !== route) {
@@ -221,12 +222,143 @@ export default function BottomNavigationBar() {
         >
           <motion.div
             className={`bottom-nav-- ${
+              barPosition === "align_left"
+                ? "align_left"
+                : barPosition === "align_right"
+                ? "align_right"
+                : ""
+            } ${
               hoveredRoute === "/home" && path === "/"
                 ? null
                 : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
-            } ${themeName} flex justify-between w-full`}
+            } ${themeName} flex ${
+              (barPosition === "align_left" || barPosition === "align_right") &&
+              !hideFlags &&
+              "flex-col"
+            } justify-between w-full`}
             animate={navBoxInsideControls}
+            style={{
+              borderTopRightRadius:
+                barPosition === "align_left" ||
+                barPosition === "align_right" ||
+                hideFlags
+                  ? "20px"
+                  : 0,
+              borderTopLeftRadius:
+                barPosition === "align_left" ||
+                barPosition === "align_right" ||
+                hideFlags
+                  ? "20px"
+                  : 0,
+            }}
           >
+            {(barPosition !== "align_left" && barPosition !== "align_right") ||
+            hideFlags ? (
+              <motion.div></motion.div>
+            ) : (
+              <motion.div className="font-semibold text-[11px] relative top-5 flex justify-center items-center gap-[12px]">
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 40,
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
+
+                    await divControls.start({
+                      maxWidth: "5%",
+                      margin: "0 2% 0 2%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
+
+                    await navBoxInsideControls.start({
+                      height: "90vh",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+                    setBarPosition("align_left");
+                    setHideFlags(false);
+                  }}
+                >
+                  L
+                </span>
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navBoxInsideControls.start({
+                      height: "initial",
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
+
+                    await divControls.start({
+                      maxWidth: "96%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
+
+                    await navControls.start({
+                      bottom: 20,
+                      top: "auto",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+
+                    setBarPosition("default_pos");
+                    setHideFlags(false);
+                  }}
+                >
+                  B
+                </span>
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 40,
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
+
+                    await divControls.start({
+                      maxWidth: "5%",
+                      margin: "0 2% 0 auto",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
+
+                    await navBoxInsideControls.start({
+                      height: "90vh",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+                    setBarPosition("align_right");
+                    setHideFlags(false);
+                  }}
+                >
+                  R
+                </span>
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navBoxInsideControls.start({
+                      height: "initial",
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
+
+                    await divControls.start({
+                      maxWidth: "96%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
+
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 20,
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+
+                    setBarPosition("align_top");
+                    setHideFlags(false);
+                  }}
+                >
+                  T
+                </span>
+              </motion.div>
+            )}
             <motion.ul
               className="list-none flex justify-center items-center w-full gap-[8px]"
               initial={{ flexWrap: "wrap" }}
@@ -240,10 +372,21 @@ export default function BottomNavigationBar() {
                   onMouseLeave={() => {
                     setHoveredRoute(null);
                   }}
+                  style={{
+                    cursor: path === item.route ? "default" : "pointer",
+                  }}
                   data-name={item.name}
                   onClick={() => handleNavClick(item.route)}
-                  className={`cursor-pointer ${
-                    path === item.route && "active_route"
+                  className={`cursor-pointer   ${
+                    path === item.route &&
+                    barPosition === "align_left" &&
+                    !hideFlags
+                      ? "active_route_align_left"
+                      : path === item.route &&
+                        barPosition === "align_right" &&
+                        !hideFlags
+                      ? "active_route_align_right"
+                      : path === item.route && !hideFlags && "active_route"
                   }`}
                   key={index}
                 >
@@ -251,66 +394,130 @@ export default function BottomNavigationBar() {
                 </motion.li>
               ))}
             </motion.ul>
+            {(barPosition !== "align_left" && barPosition !== "align_right") ||
+            hideFlags ? (
+              <motion.div></motion.div>
+            ) : (
+              <motion.div className="font-semibold text-[11px] relative bottom-5">
+                {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
+              </motion.div>
+            )}
           </motion.div>
+          {(barPosition !== "default_pos" && barPosition !== "align_top") ||
+          hideFlags ? null : (
+            <>
+              <motion.div
+                className={`absolute font-semibold text-[12px] -top-[22px] right-0 route ${themeName}`}
+              >
+                {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
+              </motion.div>
+              <motion.div
+                className={`absolute font-semibold text-[12px] left-0 -top-[22px] navbar-settings ${themeName}`}
+              >
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 40,
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
 
-          <motion.div
-            className={`absolute font-semibold text-[12px] right-0 -top-[22px] route ${themeName}`}
-          >
-            {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
-          </motion.div>
+                    await divControls.start({
+                      maxWidth: "5%",
+                      margin: "0 2% 0 2%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
 
-          <motion.div
-            className={`absolute font-semibold text-[12px] left-0 -top-[22px] navbar-settings ${themeName}`}
-          >
-            <span
-              onClick={async () => {
-                await navControls.start({
-                  bottom: "auto",
-                  top: 40,
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                    await navBoxInsideControls.start({
+                      height: "90vh",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+                    setBarPosition("align_left");
+                    setHideFlags(false);
+                  }}
+                >
+                  L
+                </span>
 
-                await divControls.start({
-                  maxWidth: "5%",
-                  margin: "0 0 0 2%",
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navBoxInsideControls.start({
+                      height: "initial",
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
 
-                await navBoxInsideControls.start({
-                  height: "90vh",
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                    await divControls.start({
+                      maxWidth: "96%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
 
-                setBarPosition("align_left");
-              }}
-            >
-              |
-            </span>
+                    await navControls.start({
+                      bottom: 20,
+                      top: "auto",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
 
-            <span
-              onClick={async () => {
-                await navBoxInsideControls.start({
-                  height: "initial",
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                    setBarPosition("default_pos");
+                    setHideFlags(false);
+                  }}
+                >
+                  B
+                </span>
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 40,
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
 
-                await divControls.start({
-                  maxWidth: "96%",
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                    await divControls.start({
+                      maxWidth: "5%",
+                      margin: "0 2% 0 auto",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
 
-                await navControls.start({
-                  bottom: 20,
-                  top: "auto",
-                  transition: { duration: 0.5, ease: "easeInOut" },
-                });
+                    await navBoxInsideControls.start({
+                      height: "90vh",
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+                    setBarPosition("align_right");
+                    setHideFlags(false);
+                  }}
+                >
+                  R
+                </span>
+                <span
+                  onClick={async () => {
+                    setHideFlags(true);
+                    await navBoxInsideControls.start({
+                      height: "initial",
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    });
 
-                setBarPosition("default_pos");
-              }}
-            >
-              -
-            </span>
-          </motion.div>
+                    await divControls.start({
+                      maxWidth: "96%",
+                      transition: { duration: 1, ease: "easeInOut" },
+                    });
+
+                    await navControls.start({
+                      bottom: "auto",
+                      top: 20,
+                      transition: { duration: 1.2, ease: "easeInOut" },
+                    });
+
+                    setBarPosition("align_top");
+                    setHideFlags(false);
+                  }}
+                >
+                  T
+                </span>
+              </motion.div>
+            </>
+          )}
         </motion.div>
       </motion.nav>
     </AnimatePresence>

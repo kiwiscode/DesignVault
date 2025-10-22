@@ -16,13 +16,7 @@ export default function Home() {
           fontSize: "2rem",
         }}
       >
-        <p>
-          Hi 👋🏻 I'm Aykut. I’m passionate about both frontend and backend
-          development.
-          <br />
-          On this platform, I share the projects I've worked on and the tools
-          I've used.
-        </p>
+        <p>Home</p>
         <p>
           This site is a place to learn, explore, and get inspired. Here’s what
           you’ll find:

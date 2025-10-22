@@ -11,7 +11,7 @@ export default function OnOffSwitchButton() {
   const lightsOn = new Audio(lightsOnAsset);
 
   return (
-    <div className={`switch-controller-- ${themeName}`}>
+    <div className={`switch-controller-- hidden ${themeName}`}>
       <div className={`switchyyy ${themeName}`}>
         <div
           onClick={() => {
