@@ -16,6 +16,7 @@ export default function BottomNavigationBar() {
   const navBoxInsideControls = useAnimation();
   const navBoxInsideUlItemControls = useAnimation();
   const [hideFlags, setHideFlags] = useState(false);
+  const [isSlideActive, setIsSlideActive] = useState(false);
 
   const handleNavClick = (route) => {
     if (path !== route) {
@@ -221,7 +222,7 @@ export default function BottomNavigationBar() {
           animate={divControls}
         >
           <motion.div
-            className={`bottom-nav-- ${
+            className={`bottom-nav-- relative ${
               barPosition === "align_left"
                 ? "align_left"
                 : barPosition === "align_right"
@@ -241,25 +242,34 @@ export default function BottomNavigationBar() {
               borderTopRightRadius:
                 barPosition === "align_left" ||
                 barPosition === "align_right" ||
+                barPosition === "align_top" ||
                 hideFlags
                   ? "20px"
                   : 0,
               borderTopLeftRadius:
                 barPosition === "align_left" ||
                 barPosition === "align_right" ||
+                barPosition === "align_top" ||
                 hideFlags
                   ? "20px"
                   : 0,
+              borderBottomLeftRadius:
+                barPosition !== "align_top" || hideFlags ? "20px" : 0,
+              borderBottomRightRadius:
+                barPosition !== "align_top" || hideFlags ? "20px" : 0,
             }}
           >
             {(barPosition !== "align_left" && barPosition !== "align_right") ||
             hideFlags ? (
               <motion.div></motion.div>
             ) : (
-              <motion.div className="font-semibold text-[11px] relative top-5 flex justify-center items-center gap-[12px]">
+              <motion.div className="font-semibold relative top-5 flex flex-wrap justify-center items-center gap-[12px]">
                 <span
                   onClick={async () => {
                     setHideFlags(true);
+                    if (barPosition === "align_right") {
+                      setIsSlideActive(true);
+                    }
                     await navControls.start({
                       bottom: "auto",
                       top: 40,
@@ -276,11 +286,27 @@ export default function BottomNavigationBar() {
                       height: "90vh",
                       transition: { duration: 1.2, ease: "easeInOut" },
                     });
+
                     setBarPosition("align_left");
                     setHideFlags(false);
                   }}
                 >
-                  L
+                  {/* dock left */}
+                  <svg
+                    className="flex"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M2 4H22V20H2V4ZM8 6H20V18H8V6Z"
+                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                    />
+                  </svg>
                 </span>
                 <span
                   onClick={async () => {
@@ -305,11 +331,29 @@ export default function BottomNavigationBar() {
                     setHideFlags(false);
                   }}
                 >
-                  B
+                  {/* dock bottom */}
+                  <svg
+                    className="flex"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                    />
+                  </svg>
                 </span>
                 <span
                   onClick={async () => {
                     setHideFlags(true);
+                    if (barPosition === "align_left") {
+                      setIsSlideActive(true);
+                    }
                     await navControls.start({
                       bottom: "auto",
                       top: 40,
@@ -326,11 +370,27 @@ export default function BottomNavigationBar() {
                       height: "90vh",
                       transition: { duration: 1.2, ease: "easeInOut" },
                     });
+
                     setBarPosition("align_right");
                     setHideFlags(false);
                   }}
                 >
-                  R
+                  {/* dock right */}
+                  <svg
+                    className="flex"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M2 4H22V20H2V4ZM16 18V6H4V18H16Z"
+                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                    />
+                  </svg>
                 </span>
                 <span
                   onClick={async () => {
@@ -355,7 +415,23 @@ export default function BottomNavigationBar() {
                     setHideFlags(false);
                   }}
                 >
-                  T
+                  {/* dock top */}
+                  <svg
+                    className="flex"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    style={{ transform: "rotate(180deg)" }}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                    />
+                  </svg>
                 </span>
               </motion.div>
             )}
@@ -407,114 +483,239 @@ export default function BottomNavigationBar() {
           hideFlags ? null : (
             <>
               <motion.div
-                className={`absolute font-semibold text-[12px] -top-[22px] right-0 route ${themeName}`}
+                className={`absolute font-semibold min-w-[100px] text-[11px] max-h-[29px] h-full ${
+                  barPosition === "align_top" ? "top-[98.6%]" : "-top-[28.0px]"
+                }  right-0 route  ${themeName}`}
+                style={{
+                  borderLeft:
+                    themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderRight:
+                    themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderTop:
+                    barPosition === "align_top"
+                      ? 0
+                      : themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderBottom:
+                    barPosition === "default_pos"
+                      ? 0
+                      : themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderTopRightRadius:
+                    barPosition === "align_top" ? 0 : "20px",
+                  borderBottomRightRadius:
+                    barPosition === "align_top" ? "20px" : 0,
+                }}
               >
                 {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
               </motion.div>
               <motion.div
-                className={`absolute font-semibold text-[12px] left-0 -top-[22px] navbar-settings ${themeName}`}
+                className={`absolute font-semibold min-w-[100px] max-h-[29px] h-full ${
+                  barPosition === "align_top" ? "top-[98.6%]" : "-top-[28.0px]"
+                }  left-0 navbar-settings ${themeName}`}
+                style={{
+                  borderLeft:
+                    themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderRight:
+                    themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderTop:
+                    barPosition === "align_top"
+                      ? 0
+                      : themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderBottom:
+                    barPosition === "default_pos"
+                      ? 0
+                      : themeName === "dark-theme"
+                      ? "1px solid #777777"
+                      : "1px solid rgba(0,0,0,0.1)",
+                  borderTopLeftRadius: barPosition === "align_top" ? 0 : "20px",
+                  borderBottomLeftRadius:
+                    barPosition === "align_top" ? "20px" : 0,
+                }}
               >
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 40,
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                <div className="w-full flex gap-[8px] items-center">
+                  <span
+                    onClick={async () => {
+                      setHideFlags(true);
+                      if (barPosition === "align_right") {
+                        setIsSlideActive(true);
+                      }
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 40,
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
 
-                    await divControls.start({
-                      maxWidth: "5%",
-                      margin: "0 2% 0 2%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 2%",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
 
-                    await navBoxInsideControls.start({
-                      height: "90vh",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
-                    setBarPosition("align_left");
-                    setHideFlags(false);
-                  }}
-                >
-                  L
-                </span>
+                      await navBoxInsideControls.start({
+                        height: "90vh",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
 
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navBoxInsideControls.start({
-                      height: "initial",
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                      setBarPosition("align_left");
+                      setHideFlags(false);
+                    }}
+                  >
+                    {/* dock left */}
+                    <svg
+                      className="flex"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M2 4H22V20H2V4ZM8 6H20V18H8V6Z"
+                        fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    onClick={async () => {
+                      setHideFlags(true);
+                      await navBoxInsideControls.start({
+                        height: "initial",
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
 
-                    await divControls.start({
-                      maxWidth: "96%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                      await divControls.start({
+                        maxWidth: "96%",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
 
-                    await navControls.start({
-                      bottom: 20,
-                      top: "auto",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
+                      await navControls.start({
+                        bottom: 20,
+                        top: "auto",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
 
-                    setBarPosition("default_pos");
-                    setHideFlags(false);
-                  }}
-                >
-                  B
-                </span>
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 40,
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                      setBarPosition("default_pos");
+                      setHideFlags(false);
+                    }}
+                  >
+                    {/* dock bottom */}
+                    <svg
+                      className="flex"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                        fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    onClick={async () => {
+                      setHideFlags(true);
+                      if (barPosition === "align_left") {
+                        setIsSlideActive(true);
+                      }
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 40,
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
 
-                    await divControls.start({
-                      maxWidth: "5%",
-                      margin: "0 2% 0 auto",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 auto",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
 
-                    await navBoxInsideControls.start({
-                      height: "90vh",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
-                    setBarPosition("align_right");
-                    setHideFlags(false);
-                  }}
-                >
-                  R
-                </span>
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navBoxInsideControls.start({
-                      height: "initial",
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                      await navBoxInsideControls.start({
+                        height: "90vh",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
 
-                    await divControls.start({
-                      maxWidth: "96%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                      setBarPosition("align_right");
+                      setHideFlags(false);
+                    }}
+                  >
+                    {/* dock right */}
+                    <svg
+                      className="flex"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M2 4H22V20H2V4ZM16 18V6H4V18H16Z"
+                        fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    onClick={async () => {
+                      setHideFlags(true);
+                      await navBoxInsideControls.start({
+                        height: "initial",
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
 
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 20,
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
+                      await divControls.start({
+                        maxWidth: "96%",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
 
-                    setBarPosition("align_top");
-                    setHideFlags(false);
-                  }}
-                >
-                  T
-                </span>
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 20,
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
+
+                      setBarPosition("align_top");
+                      setHideFlags(false);
+                    }}
+                  >
+                    {/* dock top */}
+                    <svg
+                      className="flex"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      style={{ transform: "rotate(180deg)" }}
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                        fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                      />
+                    </svg>
+                  </span>
+                </div>
               </motion.div>
             </>
           )}
