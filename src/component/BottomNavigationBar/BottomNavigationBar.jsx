@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 export default function BottomNavigationBar() {
-  const [isExiting, setIsExiting] = useState(false);
   const [isRocketNavLoading, setRocketNavLoad] = useState(false);
   const navigate = useNavigate();
   const path = useLocation().pathname;
@@ -16,7 +15,7 @@ export default function BottomNavigationBar() {
   const navBoxInsideControls = useAnimation();
   const navBoxInsideUlItemControls = useAnimation();
   const [hideFlags, setHideFlags] = useState(false);
-  const [isSlideActive, setIsSlideActive] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleNavClick = (route) => {
     if (path !== route) {
@@ -29,14 +28,6 @@ export default function BottomNavigationBar() {
       navigate(route);
     }, 500);
   };
-
-  useEffect(() => {
-    if (!isExiting) {
-      document.documentElement.style.setProperty("overflow", "hidden");
-    } else {
-      document.documentElement.style.setProperty("overflow", "auto");
-    }
-  }, [isExiting]);
 
   const navItems = [
     {
@@ -222,7 +213,9 @@ export default function BottomNavigationBar() {
           animate={divControls}
         >
           <motion.div
-            className={`bottom-nav-- relative ${
+            className={`bottom-nav-- relative  ${
+              isAnimating ? "pointer-events-none" : "pointer-events-auto"
+            } ${
               barPosition === "align_left"
                 ? "align_left"
                 : barPosition === "align_right"
@@ -232,11 +225,11 @@ export default function BottomNavigationBar() {
               hoveredRoute === "/home" && path === "/"
                 ? null
                 : !isRocketNavLoading && hoveredRoute !== path && "active_hover"
-            } ${themeName} flex ${
+            } ${themeName} ${
               (barPosition === "align_left" || barPosition === "align_right") &&
               !hideFlags &&
-              "flex-col"
-            } justify-between w-full`}
+              "flex-col justify-between"
+            }  w-full`}
             animate={navBoxInsideControls}
             style={{
               borderTopRightRadius:
@@ -259,182 +252,271 @@ export default function BottomNavigationBar() {
                 barPosition !== "align_top" || hideFlags ? "20px" : 0,
             }}
           >
-            {(barPosition !== "align_left" && barPosition !== "align_right") ||
+            {/* {(barPosition !== "align_left" && barPosition !== "align_right") ||
             hideFlags ? (
               <motion.div></motion.div>
-            ) : (
-              <motion.div className="font-semibold relative top-5 flex flex-wrap justify-center items-center gap-[12px]">
-                <span
-                  onClick={async () => {
+            ) : ( */}
+
+            <motion.div
+              className="font-semibold relative top-5  flex-wrap justify-center items-center gap-[12px] side-navbar-settings "
+              style={{
+                display:
+                  (barPosition === "align_left" ||
+                    barPosition === "align_right") &&
+                  !hideFlags
+                    ? "flex"
+                    : "none",
+              }}
+            >
+              <span
+                className={`${
+                  barPosition === "align_left"
+                    ? "cursor-default opacity-[0.3]"
+                    : "cursor-pointer"
+                }`}
+                onClick={async () => {
+                  if (barPosition !== "align_left") {
+                    setIsAnimating(true);
                     setHideFlags(true);
+
                     if (barPosition === "align_right") {
-                      setIsSlideActive(true);
+                      await navBoxInsideControls.start({
+                        height: "auto",
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
+
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 20,
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
+
+                      await divControls.start({
+                        maxWidth: "96%",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
+
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 2%",
+                        transition: { duration: 1.4, ease: "easeInOut" },
+                      });
+
+                      await navBoxInsideControls.start({
+                        height: "calc(100vh - 40px)",
+                        transition: { duration: 1.6, ease: "easeInOut" },
+                      });
+                    } else {
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 20,
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 2%",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
+                      await navBoxInsideControls.start({
+                        height: "calc(100vh - 40px)",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
                     }
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 40,
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
-
-                    await divControls.start({
-                      maxWidth: "5%",
-                      margin: "0 2% 0 2%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
-
-                    await navBoxInsideControls.start({
-                      height: "90vh",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
 
                     setBarPosition("align_left");
                     setHideFlags(false);
-                  }}
+                    setIsAnimating(false);
+                  }
+                  return;
+                }}
+              >
+                {/* dock left */}
+                <svg
+                  className="flex"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  viewBox="0 0 24 24"
+                  fill="none"
                 >
-                  {/* dock left */}
-                  <svg
-                    className="flex"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M2 4H22V20H2V4ZM8 6H20V18H8V6Z"
-                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
-                    />
-                  </svg>
-                </span>
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navBoxInsideControls.start({
-                      height: "initial",
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M2 4H22V20H2V4ZM8 6H20V18H8V6Z"
+                    fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                  />
+                </svg>
+              </span>
+              <span
+                className="cursor-pointer"
+                onClick={async () => {
+                  setIsAnimating(true);
+                  setHideFlags(true);
+                  await navBoxInsideControls.start({
+                    height: "auto",
+                    transition: { duration: 0.8, ease: "easeInOut" },
+                  });
 
-                    await divControls.start({
-                      maxWidth: "96%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                  await divControls.start({
+                    maxWidth: "96%",
+                    transition: { duration: 1, ease: "easeInOut" },
+                  });
 
-                    await navControls.start({
-                      bottom: 20,
-                      top: "auto",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
+                  await navControls.start({
+                    bottom: 20,
+                    top: "auto",
+                    transition: { duration: 1.2, ease: "easeInOut" },
+                  });
 
-                    setBarPosition("default_pos");
-                    setHideFlags(false);
-                  }}
+                  setBarPosition("default_pos");
+                  setHideFlags(false);
+                  setIsAnimating(false);
+                }}
+              >
+                {/* dock bottom */}
+                <svg
+                  className="flex"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  viewBox="0 0 24 24"
+                  fill="none"
                 >
-                  {/* dock bottom */}
-                  <svg
-                    className="flex"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
-                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
-                    />
-                  </svg>
-                </span>
-                <span
-                  onClick={async () => {
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                    fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                  />
+                </svg>
+              </span>
+              <span
+                className={`${
+                  barPosition === "align_right"
+                    ? "cursor-default opacity-[0.3]"
+                    : "cursor-pointer"
+                }`}
+                onClick={async () => {
+                  if (barPosition !== "align_right") {
+                    setIsAnimating(true);
                     setHideFlags(true);
                     if (barPosition === "align_left") {
-                      setIsSlideActive(true);
+                      await navBoxInsideControls.start({
+                        height: "auto",
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
+
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 20,
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
+
+                      await divControls.start({
+                        maxWidth: "96%",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
+
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 auto",
+                        transition: { duration: 1.4, ease: "easeInOut" },
+                      });
+
+                      await navBoxInsideControls.start({
+                        height: "calc(100vh - 40px)",
+                        transition: { duration: 1.6, ease: "easeInOut" },
+                      });
+                    } else {
+                      await navControls.start({
+                        bottom: "auto",
+                        top: 20,
+                        transition: { duration: 0.8, ease: "easeInOut" },
+                      });
+
+                      await divControls.start({
+                        maxWidth: "5%",
+                        margin: "0 2% 0 auto",
+                        transition: { duration: 1, ease: "easeInOut" },
+                      });
+
+                      await navBoxInsideControls.start({
+                        height: "calc(100vh - 40px)",
+                        transition: { duration: 1.2, ease: "easeInOut" },
+                      });
                     }
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 40,
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
-
-                    await divControls.start({
-                      maxWidth: "5%",
-                      margin: "0 2% 0 auto",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
-
-                    await navBoxInsideControls.start({
-                      height: "90vh",
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
 
                     setBarPosition("align_right");
                     setHideFlags(false);
-                  }}
+                    setIsAnimating(false);
+                  }
+                  return;
+                }}
+              >
+                {/* dock right */}
+                <svg
+                  className="flex"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  viewBox="0 0 24 24"
+                  fill="none"
                 >
-                  {/* dock right */}
-                  <svg
-                    className="flex"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M2 4H22V20H2V4ZM16 18V6H4V18H16Z"
-                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
-                    />
-                  </svg>
-                </span>
-                <span
-                  onClick={async () => {
-                    setHideFlags(true);
-                    await navBoxInsideControls.start({
-                      height: "initial",
-                      transition: { duration: 0.8, ease: "easeInOut" },
-                    });
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M2 4H22V20H2V4ZM16 18V6H4V18H16Z"
+                    fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                  />
+                </svg>
+              </span>
+              <span
+                className="cursor-pointer"
+                onClick={async () => {
+                  setIsAnimating(true);
+                  setHideFlags(true);
+                  await navBoxInsideControls.start({
+                    height: "auto",
+                    transition: { duration: 0.8, ease: "easeInOut" },
+                  });
 
-                    await divControls.start({
-                      maxWidth: "96%",
-                      transition: { duration: 1, ease: "easeInOut" },
-                    });
+                  await divControls.start({
+                    maxWidth: "96%",
+                    transition: { duration: 1, ease: "easeInOut" },
+                  });
 
-                    await navControls.start({
-                      bottom: "auto",
-                      top: 20,
-                      transition: { duration: 1.2, ease: "easeInOut" },
-                    });
+                  await navControls.start({
+                    bottom: "auto",
+                    top: 20,
+                    transition: { duration: 1.2, ease: "easeInOut" },
+                  });
 
-                    setBarPosition("align_top");
-                    setHideFlags(false);
-                  }}
+                  setBarPosition("align_top");
+                  setHideFlags(false);
+                  setIsAnimating(false);
+                }}
+              >
+                {/* dock top */}
+                <svg
+                  className="flex"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20px"
+                  height="20px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style={{ transform: "rotate(180deg)" }}
                 >
-                  {/* dock top */}
-                  <svg
-                    className="flex"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    style={{ transform: "rotate(180deg)" }}
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
-                      fill={themeName === "dark-theme" ? "#fff" : "#000000"}
-                    />
-                  </svg>
-                </span>
-              </motion.div>
-            )}
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M2 20V4H22V20H2ZM4 6H20V14H4V6Z"
+                    fill={themeName === "dark-theme" ? "#fff" : "#000000"}
+                  />
+                </svg>
+              </span>
+            </motion.div>
+
+            {/* )} */}
             <motion.ul
               className="list-none flex justify-center items-center w-full gap-[8px]"
               initial={{ flexWrap: "wrap" }}
@@ -470,14 +552,24 @@ export default function BottomNavigationBar() {
                 </motion.li>
               ))}
             </motion.ul>
-            {(barPosition !== "align_left" && barPosition !== "align_right") ||
+            {/* {(barPosition !== "align_left" && barPosition !== "align_right") ||
             hideFlags ? (
               <motion.div></motion.div>
-            ) : (
-              <motion.div className="font-semibold text-[11px] relative bottom-5">
-                {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
-              </motion.div>
-            )}
+            ) : ( */}
+            <motion.div
+              className="font-semibold text-[11px] relative bottom-5"
+              style={{
+                display:
+                  (barPosition === "align_left" ||
+                    barPosition === "align_right") &&
+                  !hideFlags
+                    ? "flex"
+                    : "none",
+              }}
+            >
+              {hoveredRoute ? hoveredRoute : path === "/" ? "/home" : path}
+            </motion.div>
+            {/* )} */}
           </motion.div>
           {(barPosition !== "default_pos" && barPosition !== "align_top") ||
           hideFlags ? null : (
@@ -547,14 +639,13 @@ export default function BottomNavigationBar() {
               >
                 <div className="w-full flex gap-[8px] items-center">
                   <span
+                    className="cursor-pointer"
                     onClick={async () => {
+                      setIsAnimating(true);
                       setHideFlags(true);
-                      if (barPosition === "align_right") {
-                        setIsSlideActive(true);
-                      }
                       await navControls.start({
                         bottom: "auto",
-                        top: 40,
+                        top: 20,
                         transition: { duration: 0.8, ease: "easeInOut" },
                       });
 
@@ -565,12 +656,13 @@ export default function BottomNavigationBar() {
                       });
 
                       await navBoxInsideControls.start({
-                        height: "90vh",
+                        height: "calc(100vh - 40px)",
                         transition: { duration: 1.2, ease: "easeInOut" },
                       });
 
                       setBarPosition("align_left");
                       setHideFlags(false);
+                      setIsAnimating(false);
                     }}
                   >
                     {/* dock left */}
@@ -591,26 +683,36 @@ export default function BottomNavigationBar() {
                     </svg>
                   </span>
                   <span
+                    className={`${
+                      barPosition === "default_pos"
+                        ? "cursor-default opacity-[0.3]"
+                        : "cursor-pointer"
+                    }`}
                     onClick={async () => {
-                      setHideFlags(true);
-                      await navBoxInsideControls.start({
-                        height: "initial",
-                        transition: { duration: 0.8, ease: "easeInOut" },
-                      });
+                      if (barPosition !== "default_pos") {
+                        setIsAnimating(true);
+                        setHideFlags(true);
+                        await navBoxInsideControls.start({
+                          height: "auto",
+                          transition: { duration: 0.8, ease: "easeInOut" },
+                        });
 
-                      await divControls.start({
-                        maxWidth: "96%",
-                        transition: { duration: 1, ease: "easeInOut" },
-                      });
+                        await divControls.start({
+                          maxWidth: "96%",
+                          transition: { duration: 1, ease: "easeInOut" },
+                        });
 
-                      await navControls.start({
-                        bottom: 20,
-                        top: "auto",
-                        transition: { duration: 1.2, ease: "easeInOut" },
-                      });
+                        await navControls.start({
+                          bottom: 20,
+                          top: "auto",
+                          transition: { duration: 1.2, ease: "easeInOut" },
+                        });
 
-                      setBarPosition("default_pos");
-                      setHideFlags(false);
+                        setBarPosition("default_pos");
+                        setHideFlags(false);
+                        setIsAnimating(false);
+                      }
+                      return;
                     }}
                   >
                     {/* dock bottom */}
@@ -631,14 +733,14 @@ export default function BottomNavigationBar() {
                     </svg>
                   </span>
                   <span
+                    className="cursor-pointer"
                     onClick={async () => {
+                      setIsAnimating(true);
                       setHideFlags(true);
-                      if (barPosition === "align_left") {
-                        setIsSlideActive(true);
-                      }
+
                       await navControls.start({
                         bottom: "auto",
-                        top: 40,
+                        top: 20,
                         transition: { duration: 0.8, ease: "easeInOut" },
                       });
 
@@ -649,12 +751,13 @@ export default function BottomNavigationBar() {
                       });
 
                       await navBoxInsideControls.start({
-                        height: "90vh",
+                        height: "calc(100vh - 40px)",
                         transition: { duration: 1.2, ease: "easeInOut" },
                       });
 
                       setBarPosition("align_right");
                       setHideFlags(false);
+                      setIsAnimating(false);
                     }}
                   >
                     {/* dock right */}
@@ -675,26 +778,36 @@ export default function BottomNavigationBar() {
                     </svg>
                   </span>
                   <span
+                    className={`${
+                      barPosition === "align_top"
+                        ? "cursor-default opacity-[0.3]"
+                        : "cursor-pointer"
+                    }`}
                     onClick={async () => {
-                      setHideFlags(true);
-                      await navBoxInsideControls.start({
-                        height: "initial",
-                        transition: { duration: 0.8, ease: "easeInOut" },
-                      });
+                      if (barPosition !== "align_top") {
+                        setIsAnimating(true);
+                        setHideFlags(true);
+                        await navBoxInsideControls.start({
+                          height: "auto",
+                          transition: { duration: 0.8, ease: "easeInOut" },
+                        });
 
-                      await divControls.start({
-                        maxWidth: "96%",
-                        transition: { duration: 1, ease: "easeInOut" },
-                      });
+                        await divControls.start({
+                          maxWidth: "96%",
+                          transition: { duration: 1, ease: "easeInOut" },
+                        });
 
-                      await navControls.start({
-                        bottom: "auto",
-                        top: 20,
-                        transition: { duration: 1.2, ease: "easeInOut" },
-                      });
+                        await navControls.start({
+                          bottom: "auto",
+                          top: 20,
+                          transition: { duration: 1.2, ease: "easeInOut" },
+                        });
 
-                      setBarPosition("align_top");
-                      setHideFlags(false);
+                        setBarPosition("align_top");
+                        setHideFlags(false);
+                        setIsAnimating(false);
+                      }
+                      return;
                     }}
                   >
                     {/* dock top */}
