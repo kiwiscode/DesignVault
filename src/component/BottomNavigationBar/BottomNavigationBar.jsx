@@ -21,7 +21,6 @@ export default function BottomNavigationBar() {
 
   const { width } = useWindowDimensions();
 
-  console.log("width:", width);
   const handleNavClick = (route) => {
     if (path !== route) {
       setRocketNavLoad(true);
@@ -231,7 +230,7 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: width <= 768 ? "20%" : "5%",
+          maxWidth: width <= 768 ? "9.375%" : "5%",
           margin: "0 2% 0 2%",
           transition: { duration: 1.2, ease: "easeInOut" },
         });
@@ -247,7 +246,7 @@ export default function BottomNavigationBar() {
           transition: { duration: 0.8, ease: "easeInOut" },
         });
         await divControls.start({
-          maxWidth: width <= 768 ? "20%" : "5%",
+          maxWidth: width <= 768 ? "9.375%" : "5%",
           margin: "0 2% 0 2%",
           transition: { duration: 1, ease: "easeInOut" },
         });
@@ -312,7 +311,7 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: width <= 768 ? "20%" : "5%",
+          maxWidth: width <= 768 ? "9.375%" : "5%",
           margin: "0 2% 0 auto",
           transition: { duration: 1.2, ease: "easeInOut" },
         });
@@ -329,7 +328,7 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: width <= 768 ? "20%" : "5%",
+          maxWidth: width <= 768 ? "9.375%" : "5%",
           margin: "0 2% 0 auto",
           transition: { duration: 1, ease: "easeInOut" },
         });
@@ -396,10 +395,13 @@ export default function BottomNavigationBar() {
         case "align_top":
           return { maxWidth: "96%", margin: "0 2% 0 2%" };
         case "align_left":
-          return { maxWidth: width <= 768 ? "20%" : "5%", margin: "0 2% 0 2%" };
+          return {
+            maxWidth: width <= 768 ? "72px" : "5%",
+            margin: "0 2% 0 2%",
+          };
         case "align_right":
           return {
-            maxWidth: width <= 768 ? "20%" : "5%",
+            maxWidth: width <= 768 ? "72px" : "5%",
             margin: "0 2% 0 auto",
           };
         default:
