@@ -3,18 +3,18 @@ import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
+import { GlobalContext } from "../../context/AppContext";
 export default function BottomNavigationBar() {
   const [isRocketNavLoading, setRocketNavLoad] = useState(false);
+  const { barPosition, setBarPosition } = useContext(GlobalContext);
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const [hoveredRoute, setHoveredRoute] = useState(path);
   const { themeName } = useContext(ThemeContext);
-  const [barPosition, setBarPosition] = useState("default_pos");
+
   const navControls = useAnimation();
   const divControls = useAnimation();
-  const leftSideUpperControls = useAnimation();
   const navBoxInsideControls = useAnimation();
-  const navBoxInsideUlItemControls = useAnimation();
   const [hideFlags, setHideFlags] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -369,11 +369,58 @@ export default function BottomNavigationBar() {
     }
   }
 
+  function getInitialPositionPersistence(controller) {
+    if (controller === "navControls") {
+      switch (barPosition) {
+        case "default_pos":
+          return {
+            bottom: 20,
+          };
+        case "align_left":
+        case "align_top":
+        case "align_right":
+          return {
+            top: 20,
+          };
+
+        default:
+          break;
+      }
+    } else if (controller === "divControls") {
+      switch (barPosition) {
+        case "default_pos":
+        case "align_top":
+          return { maxWidth: "96%", margin: "0 2% 0 2%" };
+        case "align_left":
+          return { maxWidth: "5%", margin: "0 2% 0 2%" };
+        case "align_right":
+          return { maxWidth: "5%", margin: "0 2% 0 auto" };
+        default:
+          break;
+      }
+    } else if (controller === "navBoxInsideControls") {
+      switch (barPosition) {
+        case "default_pos":
+        case "align_top":
+          return {
+            height: "auto",
+          };
+        case "align_left":
+        case "align_right":
+          return { height: "calc(100vh - 40px)" };
+
+        default:
+          break;
+      }
+    }
+  }
+
   const docks = new Docks(navControls, divControls, navBoxInsideControls, {
     setIsAnimating,
     setHideFlags,
     setBarPosition,
   });
+
   return (
     <AnimatePresence>
       {isRocketNavLoading && (
@@ -387,16 +434,16 @@ export default function BottomNavigationBar() {
 
       <motion.nav
         className="bottom-nav-wrapper-- chirp-regular-font"
-        initial={{ bottom: 20 }}
+        initial={getInitialPositionPersistence("navControls")}
         animate={navControls}
       >
         <motion.div
           className="relative"
-          initial={{ maxWidth: "96%", margin: "0 2% 0 2%" }}
+          initial={getInitialPositionPersistence("divControls")}
           animate={divControls}
         >
           <motion.div
-            className={`bottom-nav-- relative flex items-center  ${
+            className={`bottom-nav-- ${barPosition} relative flex items-center  ${
               isAnimating ? "pointer-events-none" : "pointer-events-auto"
             } ${
               hoveredRoute === "/home" && path === "/"
@@ -407,6 +454,7 @@ export default function BottomNavigationBar() {
               !hideFlags &&
               "flex-col justify-between"
             }  w-full`}
+            initial={getInitialPositionPersistence("navBoxInsideControls")}
             animate={navBoxInsideControls}
             style={{
               borderTopRightRadius:
@@ -550,7 +598,6 @@ export default function BottomNavigationBar() {
             <motion.ul
               className="list-none flex justify-center items-center w-full gap-[8px]"
               initial={{ flexWrap: "wrap" }}
-              animate={navBoxInsideUlItemControls}
             >
               {navItems.map((item, index) => (
                 <motion.li
