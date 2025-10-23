@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 import { GlobalContext } from "../../context/AppContext";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
 export default function BottomNavigationBar() {
   const [isRocketNavLoading, setRocketNavLoad] = useState(false);
   const { barPosition, setBarPosition } = useContext(GlobalContext);
@@ -18,6 +19,9 @@ export default function BottomNavigationBar() {
   const [hideFlags, setHideFlags] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const { width } = useWindowDimensions();
+
+  console.log("width:", width);
   const handleNavClick = (route) => {
     if (path !== route) {
       setRocketNavLoad(true);
@@ -227,14 +231,14 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: "5%",
+          maxWidth: width <= 768 ? "20%" : "5%",
           margin: "0 2% 0 2%",
-          transition: { duration: 1.4, ease: "easeInOut" },
+          transition: { duration: 1.2, ease: "easeInOut" },
         });
 
         await navBoxInsideControls.start({
-          height: "calc(100vh - 40px)",
-          transition: { duration: 1.6, ease: "easeInOut" },
+          height: "calc(100dvh - 40px)",
+          transition: { duration: 1.2, ease: "easeInOut" },
         });
       } else {
         await navControls.start({
@@ -243,12 +247,12 @@ export default function BottomNavigationBar() {
           transition: { duration: 0.8, ease: "easeInOut" },
         });
         await divControls.start({
-          maxWidth: "5%",
+          maxWidth: width <= 768 ? "20%" : "5%",
           margin: "0 2% 0 2%",
           transition: { duration: 1, ease: "easeInOut" },
         });
         await navBoxInsideControls.start({
-          height: "calc(100vh - 40px)",
+          height: "calc(100dvh - 40px)",
           transition: { duration: 1.2, ease: "easeInOut" },
         });
       }
@@ -308,14 +312,14 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: "5%",
+          maxWidth: width <= 768 ? "20%" : "5%",
           margin: "0 2% 0 auto",
-          transition: { duration: 1.4, ease: "easeInOut" },
+          transition: { duration: 1.2, ease: "easeInOut" },
         });
 
         await navBoxInsideControls.start({
-          height: "calc(100vh - 40px)",
-          transition: { duration: 1.6, ease: "easeInOut" },
+          height: "calc(100dvh - 40px)",
+          transition: { duration: 1.2, ease: "easeInOut" },
         });
       } else {
         await navControls.start({
@@ -325,13 +329,13 @@ export default function BottomNavigationBar() {
         });
 
         await divControls.start({
-          maxWidth: "5%",
+          maxWidth: width <= 768 ? "20%" : "5%",
           margin: "0 2% 0 auto",
           transition: { duration: 1, ease: "easeInOut" },
         });
 
         await navBoxInsideControls.start({
-          height: "calc(100vh - 40px)",
+          height: "calc(100dvh - 40px)",
           transition: { duration: 1.2, ease: "easeInOut" },
         });
       }
@@ -392,9 +396,12 @@ export default function BottomNavigationBar() {
         case "align_top":
           return { maxWidth: "96%", margin: "0 2% 0 2%" };
         case "align_left":
-          return { maxWidth: "5%", margin: "0 2% 0 2%" };
+          return { maxWidth: width <= 768 ? "20%" : "5%", margin: "0 2% 0 2%" };
         case "align_right":
-          return { maxWidth: "5%", margin: "0 2% 0 auto" };
+          return {
+            maxWidth: width <= 768 ? "20%" : "5%",
+            margin: "0 2% 0 auto",
+          };
         default:
           break;
       }
@@ -407,7 +414,7 @@ export default function BottomNavigationBar() {
           };
         case "align_left":
         case "align_right":
-          return { height: "calc(100vh - 40px)" };
+          return { height: "calc(100dvh - 40px)" };
 
         default:
           break;
@@ -438,7 +445,7 @@ export default function BottomNavigationBar() {
         animate={navControls}
       >
         <motion.div
-          className="relative"
+          className="relative min-w-[72px]"
           initial={getInitialPositionPersistence("divControls")}
           animate={divControls}
         >
@@ -596,7 +603,7 @@ export default function BottomNavigationBar() {
             )}
 
             <motion.ul
-              className="list-none flex justify-center items-center w-full gap-[8px]"
+              className="list-none flex justify-center items-center w-full gap-[8px] max-md:gap-[0px]"
               initial={{ flexWrap: "wrap" }}
             >
               {navItems.map((item, index) => (
