@@ -16,12 +16,14 @@ function App() {
     <div className="App">
       <OnOffSwitchButton />
       <BottomNavigationBar />
-      <Suspense fallback={<PageLoadingTransition />}>
-        <Routes>
-          <Route path="/components" element={<Component />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Suspense>
+      <div className="relative z-10">
+        <Suspense fallback={<PageLoadingTransition />}>
+          <Routes>
+            <Route path="/components" element={<Component />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Suspense>
+      </div>
     </div>
   );
 }
