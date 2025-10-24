@@ -5,71 +5,54 @@
   z-index: 10;
 }
 
-.switchyyy.light-theme {
-  width: 150px;
-  height: 150px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  background: #f4f4f4;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+.switchyyy {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  perspective: 300px;
+  transition: all 0.3s ease-in-out;
+}
+
+.switchyyy.light-theme {
+  background: #f4f4f4;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .clicky-meee.light-theme {
-  height: 75px;
-  width: 75px;
-  /* border-radius: 3px; */
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 4px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -10px 0px;
+  width: 30px;
+  height: 40px;
+  border-radius: 5px;
   background: #f4f4f4;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 20px 3px,
+    rgba(0, 0, 0, 0.4) 0px 6px 10px, rgba(0, 0, 0, 0.25) 0px 10px 20px -5px,
+    rgba(0, 0, 0, 0.2) 0px -10px 0px, inset rgba(0, 0, 0, 0.1) 2px 0px 4px,
+    inset rgba(0, 0, 0, 0.1) -2px 0px 4px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  transform: perspective(300px) rotateX(-10deg);
-}
-
-.clicky-meee.light-theme.active {
-  transition: all 0.3s ease-in-out;
-  -webkit-transform: scale(0.95);
-  transform: scale(0.95);
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 4px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -10px 0px;
-  transform: perspective(300px) rotateX(10deg);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  /* transform: perspective(300px) rotateX(-5deg); */
 }
 
 .switchyyy.dark-theme {
-  width: 150px;
-  height: 150px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
   background: #2a2a2a;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .clicky-meee.dark-theme {
-  height: 75px;
-  width: 75px;
-  /* border-radius: 3px; */
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 4px,
-    rgba(255, 255, 255, 0.15) 0px 7px 13px -3px,
-    rgba(0, 0, 0, 0.5) 0px -10px 0px;
+  width: 30px;
+  height: 40px;
+  border-radius: 5px;
   background: #3a3a3a;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  transform: perspective(300px) rotateX(-10deg);
-}
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 6px 10px,
+    rgba(0, 0, 0, 0.25) 0px 10px 20px 5px, rgba(0, 0, 0, 0.2) 0px 10px 0px,
+    inset rgba(0, 0, 0, 0.1) 2px 0px 4px, inset rgba(0, 0, 0, 0.1) -2px 0px 4px;
 
-.clicky-meee.dark-theme.active {
-  transition: all 0.3s ease-in-out;
-  -webkit-transform: scale(0.95);
-  transform: scale(0.95);
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 4px,
-    rgba(255, 255, 255, 0.15) 0px 7px 13px -3px,
-    rgba(0, 0, 0, 0.6) 0px -10px 0px inset;
-  background: #4a4a4a;
-  transform: perspective(300px) rotateX(10deg);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  /* transform: perspective(300px) rotateX(5deg); */
 }
