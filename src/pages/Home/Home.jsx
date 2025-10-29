@@ -10,14 +10,6 @@ export default function Home() {
         color: themeName === "dark-theme" && "#ffffff",
       }}
       className="chirp-regular-font px-[36px] mt-[60px]"
-    >
-      <div
-        style={{
-          fontSize: "2rem",
-        }}
-      >
-        home
-      </div>
-    </main>
+    ></main>
   );
 }
