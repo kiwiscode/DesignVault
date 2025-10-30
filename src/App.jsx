@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <OnOffSwitchButton />
       <BottomNavigationBar />
-      <div className="relative z-10">
+      <div className="relative -z-10 max-w-[80%] mt-[20px] w-full mx-auto">
         <Suspense fallback={<PageLoadingTransition />}>
           <Routes>
             <Route path="/components" element={<Component />} />
