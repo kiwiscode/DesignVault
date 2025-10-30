@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 // components
@@ -9,17 +9,18 @@ import Home from "./pages/Home/Home";
 
 // Lazy load the pages
 const Component = lazy(() => import("./pages/Component/Component"));
+const Practice = lazy(() => import("./pages/Practice/Practice"));
 
 function App() {
-  const path = useLocation().pathname;
   return (
     <div className="App">
       <OnOffSwitchButton />
       <BottomNavigationBar />
-      <div className="relative -z-10 max-w-[80%] max-md:max-w-[60%] mt-[20px] w-full mx-auto">
+      <div className="relative -z-10 max-w-[80%] max-md:max-w-[60%] w-full mx-auto">
         <Suspense fallback={<PageLoadingTransition />}>
           <Routes>
             <Route path="/components" element={<Component />} />
+            <Route path="/practice" element={<Practice />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Suspense>
