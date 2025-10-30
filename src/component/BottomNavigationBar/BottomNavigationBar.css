@@ -1,6 +1,8 @@
 .bottom-nav-wrapper-- {
-  position: absolute;
+  position: fixed;
   width: 100%;
+  /* background-color: green; */
+  z-index: 10;
 }
 
 .bottom-nav-- {
@@ -11,12 +13,10 @@
   );
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-
   gap: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.1);
   pointer-events: none;
-  z-index: 10;
 }
 
 .bottom-nav--.dark-theme {
@@ -35,7 +35,6 @@
   box-shadow: none;
   background: rgba(0, 0, 0, 0.1);
   color: #ffffff;
-  z-index: 10;
 }
 
 .route,
@@ -52,7 +51,6 @@
   justify-content: center;
   align-items: center;
   gap: 12px;
-  z-index: 10;
 }
 
 .bottom-nav-- ul {
