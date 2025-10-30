@@ -1,24 +1,26 @@
 .switch-controller-- {
-  position: absolute;
+  position: fixed;
   top: 20px;
   width: 100%;
   display: flex;
-  z-index: 10;
-}
-
-.switchyyy {
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 300px;
+  z-index: 20;
+  pointer-events: none;
 }
 
 .wrapper-- {
   width: 100%;
   display: flex;
+}
+
+.switchyyy {
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 300px;
+  position: relative;
+  z-index: 21;
+  pointer-events: auto;
 }
 
 .switchyyy.light-theme {
@@ -28,8 +30,6 @@
 }
 
 .clicky-meee.light-theme {
-  width: 30px;
-  height: 40px;
   border-radius: 5px;
   background: #f4f4f4;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 20px 3px,
@@ -48,8 +48,6 @@
 }
 
 .clicky-meee.dark-theme {
-  width: 30px;
-  height: 40px;
   border-radius: 5px;
   background: #3a3a3a;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 6px 10px,
