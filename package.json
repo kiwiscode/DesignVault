@@ -15,7 +15,8 @@
     "prop-types": "^15.8.1",
     "react": "^19.3.0-canary-6160773f-20251023",
     "react-dom": "^19.3.0-canary-6160773f-20251023",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
