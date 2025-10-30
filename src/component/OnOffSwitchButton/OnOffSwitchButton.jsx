@@ -65,7 +65,7 @@ export default function OnOffSwitchButton() {
       <div className={`wrapper-- ${barPosition}`}>
         <ViewTransition>
           <div
-            className={`switchyyy ${themeName}`}
+            className={`switchyyy max-md:w-[80px] max-md:h-[80px] w-[100px] h-[100px] ${themeName}`}
             style={{
               margin: onOffSwitchButtonPosition,
             }}
@@ -77,7 +77,7 @@ export default function OnOffSwitchButton() {
 
                 toggleTheme();
               }}
-              className={`clicky-meee ${themeName}`}
+              className={`clicky-meee max-md:w-[20px] max-md:h-[30px] w-[30px] h-[40px] ${themeName}`}
             ></div>
           </div>
         </ViewTransition>
