@@ -1,6 +1,6 @@
 import "./BottomNavigationBar.css";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 import { GlobalContext } from "../../context/AppContext";
@@ -55,8 +55,8 @@ export default function BottomNavigationBar() {
       ),
     },
     {
-      name: "Inspiration",
-      route: "/inspiration",
+      name: "Inspirations",
+      route: "/inspirations",
       iconCode: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,8 @@ export default function BottomNavigationBar() {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+            stroke-width="2"
+            d="m7 8l-4 4l4 4m10-8l4 4l-4 4M14 4l-4 16"
           />
         </svg>
       ),
@@ -434,10 +435,23 @@ export default function BottomNavigationBar() {
     <AnimatePresence>
       {isRocketNavLoading && (
         <motion.div
-          className="absolute top-0 left-0 h-1 bg-blue-500"
+          className="absolute top-0 left-0 h-1"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           exit={{ width: 0 }}
+          style={{
+            background: "#4e54c8",
+            background: `-webkit-linear-gradient(
+      to right,
+      #8f94fb,
+      #4e54c8
+    )`,
+            background: `linear-gradient(
+      to right,
+      #8f94fb,
+      #4e54c8
+    )`,
+          }}
         />
       )}
 
